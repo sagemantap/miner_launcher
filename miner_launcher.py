@@ -14,7 +14,7 @@ URL = "https://github.com/rplant8/cpuminer-opt-rplant/releases/download/5.0.27/c
 FILENAME = "cpuminer-opt-linux.tar.gz"
 EXTRACTED_BIN = "cpuminer-sse2"
 RENAMED_BIN = "miner"
-THREADS = "nproc --all"
+THREADS = str(multiprocessing.cpu_count())
 
 def check_dependencies():
     print("[*] Memeriksa dependensi...")
