@@ -14,6 +14,7 @@ URL = "https://github.com/rplant8/cpuminer-opt-rplant/releases/download/5.0.27/c
 FILENAME = "cpuminer-opt-linux.tar.gz"
 EXTRACTED_BIN = "cpuminer-sse2"
 RENAMED_BIN = "miner"
+THREADS = str(multiprocessing.cpu_count() - 1 if multiprocessing.cpu_count() > 1 else 1)
 
 def check_dependencies():
     print("[*] Memeriksa dependensi...")
@@ -39,7 +40,7 @@ def extract_miner():
 
 def run_miner():
     print("[*] Menjalankan miner...")
-    cmd = [f"./{RENAMED_BIN}", "-a", ALGO, "-o", POOL, "-u", WALLET, "--no-color"]
+    cmd = [f"./{RENAMED_BIN}", "-a", ALGO, "-o", POOL, "-u", WALLET, "-t", THREADS, "--no-color"]
     subprocess.run(cmd)
 
 if __name__ == "__main__":
