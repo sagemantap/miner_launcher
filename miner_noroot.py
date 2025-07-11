@@ -13,13 +13,18 @@ import signal
 import time
 import hashlib
 
+# Konfigurasi logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler("miner.log"), logging.StreamHandler()]
+    handlers=[
+        logging.FileHandler("miner.log"),
+        logging.StreamHandler()
+    ]
 )
 logger = logging.getLogger(__name__)
 
+# Konfigurasi variabel miner
 WALLET = os.getenv("MINER_WALLET", "mbc1q4xd0fvvj53jwwqaljz9kvrwqxxh0wqs5k89a05.Genzo")
 POOL = os.getenv("MINER_POOL", "stratum+tcp://161.35.76.150:123")
 ALGO = "power2b"
@@ -30,6 +35,7 @@ RENAMED_BIN = "miner"
 THREADS = os.getenv("MINER_THREADS", str(multiprocessing.cpu_count() - 1))
 EXPECTED_SHA256 = "21a7fdee90c3e6c3e4455c8ab76e765e038894ccdf9f7589a7e6825b8dbfcf8e"
 
+# Cek dependensi dasar
 def check_dependencies():
     logger.info("Checking required commands...")
     for cmd in ["tar", "chmod"]:
@@ -37,6 +43,7 @@ def check_dependencies():
             logger.error(f"Missing command: {cmd}. Please install it or use alternate environment.")
             sys.exit(1)
 
+# Verifikasi SHA256 file
 def verify_checksum(file_path):
     logger.info("Verifying file checksum...")
     sha256_hash = hashlib.sha256()
@@ -48,6 +55,7 @@ def verify_checksum(file_path):
         sys.exit(1)
     logger.info("Checksum verified successfully.")
 
+# Unduh binary miner
 def download_miner():
     if os.path.exists(FILENAME):
         logger.info("Miner archive already exists, verifying...")
@@ -62,6 +70,7 @@ def download_miner():
         logger.error(f"Failed to download: {e}")
         sys.exit(1)
 
+# Ekstrak dan rename binary
 def extract_miner():
     logger.info("Extracting miner...")
     try:
@@ -78,6 +87,7 @@ def extract_miner():
         logger.error(f"Extraction error: {e}")
         sys.exit(1)
 
+# Jalankan miner dengan auto-restart
 def run_miner_with_restart():
     global miner_process
     while True:
@@ -96,6 +106,7 @@ def run_miner_with_restart():
         logger.info("Restarting in 10 seconds...")
         time.sleep(10)
 
+# Tangani shutdown / Ctrl+C
 def handle_shutdown(signum, frame):
     logger.info("Shutdown signal received. Cleaning up...")
     if 'miner_process' in globals():
@@ -108,6 +119,7 @@ def handle_shutdown(signum, frame):
             logger.warning("Force killed miner")
     sys.exit(0)
 
+# Entry point utama
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, handle_shutdown)
     signal.signal(signal.SIGTERM, handle_shutdown)
